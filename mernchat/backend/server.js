@@ -13,6 +13,8 @@ app.use(cors());
 
 app.use('/users', userRoutes)
 require('./connection')
+
+console.log(path.join(__dirname, 'public'))
 app.use(express.static(path.join(__dirname, 'public')));
 
 const server = require('http').createServer(app);

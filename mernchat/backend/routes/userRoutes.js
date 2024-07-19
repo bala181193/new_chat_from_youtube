@@ -1,14 +1,18 @@
+const fs=require('fs')
 const router = require('express').Router();
 const User = require('../models/User');
 const multer = require('multer')
 const path = require('path')
 const { server } = require('../server')
 
-
-
+// const uploadDir = path.join(__dirname, 'public/image');
+// if (!fs.existsSync(uploadDir)) {
+//   fs.mkdirSync(uploadDir, { recursive: true });
+// }
+const filePath=path.join(__dirname,'../public/uploads/')
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/uploads')
+    cb(null, filePath)
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '_' + Date.now() + path.extname(file.originalname))
@@ -30,6 +34,9 @@ var upload = multer({
 const imageUpload = (req, res, next) => {
   upload(req, res, (err) => {
     console.log(err)
+    if(err){
+    return  res.status(400).json({err:err.message})
+    }
     return next();
   })
 
